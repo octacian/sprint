@@ -1,0 +1,17 @@
+# Settings found in Advanced Settings -> Mods -> Sprint
+
+#    Primary key that triggers a sprint speed multiplier when held.
+#    This defaults to aux1, which is also used if fast_move is enabled.
+sprint_primary (Primary Sprint Key) string aux1
+
+#    Speed multiplier applied when sprinting.
+#    Sprint key configured with the sprint_primary setting.
+sprint_speed (Speed Multiplier) float 1.8
+
+#    Jump multiplier applied when sprinting.
+#    Sprint key configured with the sprint_primary setting.
+sprint_jump (Jump Multiplier) float 1.1
+
+#    If enabled, sprinting is only allowed when moving forward, and disallowed
+#    when moving in any other direction.
+sprint_dir (Directional Sprinting) bool true
