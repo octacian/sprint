@@ -2,7 +2,7 @@
 
 local sprinting       = {}
 local secondary       = {}
-local SPEED           = minetest.settings:get("sprint_speed")        or 1.8
+local SPEED           = minetest.settings:get("sprint_speed")        or 1.3
 local JUMP            = minetest.settings:get("sprint_jump")         or 1.1
 local PRIMARY         = minetest.settings:get("sprint_primary")      or "aux1"
 local SECOND          = minetest.settings:get("sprint_second")       or "up"
