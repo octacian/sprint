@@ -24,3 +24,12 @@ sprint_jump (Jump Multiplier) float 1.1
 #    If enabled, sprinting is only allowed when moving forward, and disallowed
 #    when moving in any other direction.
 sprint_dir (Directional Sprinting) bool true
+
+
+#    If enabled, particles are shown behind the player when sprinting, taking on
+#    the top texture of the node that the player is walking on.
+sprint_particles (Enable Particles While Sprinting) bool false
+
+#    Configures the number of particles to be added behind the player as they
+#    sprint. A greater number gives more variety but causes more load on the server.
+sprint_particle_num (Max Number of Particles to Spawn) int 2 0 10
