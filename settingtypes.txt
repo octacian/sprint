@@ -4,6 +4,15 @@
 #    This defaults to aux1, which is also used if fast_move is enabled.
 sprint_primary (Primary Sprint Key) string aux1
 
+#    Secondary key that triggers the speed and jump multipliers when double-pressed
+#    and held for the duration. This is most convenient to map to the "up" ("forward")
+#    key, as it allows seemlessly enabling sprint by simply double-tapping forward
+#    without having to move your hand to reach another key.
+sprint_second (Secondary Sprint Key) string up
+
+#    If disabled, the secondary sprint key (sprint_second) is not allowed.
+sprint_enable_second (Allow Secondary Sprint Key) bool true
+
 #    Speed multiplier applied when sprinting.
 #    Sprint key configured with the sprint_primary setting.
 sprint_speed (Speed Multiplier) float 1.8

@@ -9,11 +9,13 @@ This sprinting mod was inspired by GunshipPenguin's own [sprinting mod](https://
 
 The speed and jump multipliers, as well as hotkeys, can be configured directly from the advanced settings menu in the sprint subsection of the top-level Mods section. You can also configure sprint directly from `minetest.conf` with the settings listed below.
 
-| Name           | Type   | Description           |
-| -------------- | ------ | --------------------- |
-| sprint_primary | string | Primary sprinting key |
-| sprint_speed   | float  | Speed multiplier      |
-| sprint_jump    | float  | Jump multiplier       |
-| sprint_dir     | bool   | Directional sprinting |
+| Name                 | Type   | Description                |
+| -------------------- | ------ | -------------------------- |
+| sprint_primary       | string | Primary sprinting key      |
+| sprint_second        | string | Secondary sprinting key    |
+| sprint_enable_second | bool   | Allow secondary sprint key |
+| sprint_speed         | float  | Speed multiplier           |
+| sprint_jump          | float  | Jump multiplier            |
+| sprint_dir           | bool   | Directional sprinting      |
 
-`sprint_primary` is the codename of the primary sprint key which causes the speed and jump multipliers to be applied to the player while it is held. If `sprint_dir` is set to `true`, players can only sprint while moving forward.
+`sprint_primary` is the codename of the primary sprint key which causes the speed and jump multipliers to be applied to the player while it is held. If `sprint_dir` is set to `true`, players can only sprint while moving forward. `sprint_second` defines a key that if `sprint_enable_second` is set to `true` (default) triggers sprinting when pressed twice within 0.8 seconds.
