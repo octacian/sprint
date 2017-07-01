@@ -16,12 +16,22 @@ local ALLOW_PARTICLES = minetest.settings:get("sprint_particles")
 ---
 
 local function start_sprint(player, name, trigger)
-	player:set_physics_override({speed = SPEED, jump = JUMP})
+	if player_monoids then
+		player_monoids.speed:add_change(player, SPEED, "sprint:sprint")
+		player_monoids.jump:add_change(player, JUMP, "sprint:jump")
+	else
+		player:set_physics_override({speed = SPEED, jump = JUMP})
+	end
 	sprinting[name] = {is = true, trigger = trigger}
 end
 
 local function stop_sprint(player, name)
-	player:set_physics_override({speed = 1, jump = 1})
+	if player_monoids then
+		player_monoids.speed:del_change(player, "sprint:sprint")
+		player_monoids.jump:del_change(player, "sprint:jump")
+	else
+		player:set_physics_override({speed = 1, jump = 1})
+	end
 	sprinting[name] = {is = false}
 end
 
