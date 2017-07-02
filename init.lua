@@ -2,14 +2,17 @@
 
 local sprinting       = {}
 local secondary       = {}
-local SPEED           = minetest.settings:get("sprint_speed")        or 1.3
-local JUMP            = minetest.settings:get("sprint_jump")         or 1.1
-local PRIMARY         = minetest.settings:get("sprint_primary")      or "aux1"
-local SECOND          = minetest.settings:get("sprint_second")       or "up"
-local DIR             = minetest.settings:get("sprint_dir")          or true
-local PARTICLE_NUM    = minetest.settings:get("sprint_particle_num") or 2
+local PRIMARY         = minetest.settings:get("sprint_primary") or "aux1"
+local SECOND          = minetest.settings:get("sprint_second")  or "up"
+local DIR             = minetest.settings:get("sprint_dir")     or true
+local SPEED           = minetest.settings:get("sprint_speed")
+local JUMP            = minetest.settings:get("sprint_jump")
+local PARTICLE_NUM    = minetest.settings:get("sprint_particles")
 local ALLOW_SEC       = minetest.settings:get("sprint_enable_second")
-local ALLOW_PARTICLES = minetest.settings:get("sprint_particles")
+
+SPEED        = tonumber(SPEED)        or 1.3
+JUMP         = tonumber(JUMP)         or 1.1
+PARTICLE_NUM = tonumber(PARTICLE_NUM) or 1
 
 ---
 --- Functions
@@ -61,7 +64,7 @@ minetest.register_globalstep(function(dtime)
 		if ctrl[PRIMARY] and allow and not spr.is then
 			start_sprint(player, name, "primary")
 		elseif ((not ctrl[PRIMARY] and spr.is) or
-		 		(ctrl[PRIMARY] and not allow and spr.is))
+				 (ctrl[PRIMARY] and not allow and spr.is))
 						and spr.trigger == "primary" then
 			stop_sprint(player, name)
 		end
@@ -74,7 +77,7 @@ minetest.register_globalstep(function(dtime)
 
 			if ctrl[SECOND] ~= secondary[name].last then
 				if secondary[name].time > 0.8 and not spr.is and
-				 		secondary[name].count > 0 and secondary[name].count < 3 then
+						 secondary[name].count > 0 and secondary[name].count < 3 then
 					secondary[name] = {count = 0, time = 0, last = false}
 					return
 				end
@@ -99,7 +102,7 @@ minetest.register_globalstep(function(dtime)
 		end
 
 		-- Particles
-		if ALLOW_PARTICLES ~= "false" and spr.is then
+		if PARTICLE_NUM ~= 0 and spr.is then
 			local pos = player:get_pos()
 			pos.y = pos.y - 1
 
@@ -108,18 +111,23 @@ minetest.register_globalstep(function(dtime)
 				local def = minetest.registered_nodes[node.name]
 				local tile = def.tiles[1] or def.inventory_image or ""
 				if type(tile) == "string" then
-					for i = 1, PARTICLE_NUM do
-						minetest.add_particle({
-							pos = {x = pos.x + math.random(-1,1) * math.random() / 2, y = pos.y + 1.1, z = pos.z + math.random(-1,1) * math.random() / 2},
-							velocity = {x = 0, y = 5, z = 0},
-							acceleration = {x = 0, y = -13, z = 0},
-							expirationtime = math.random(),
-							size = math.random() + 0.5,
-							collisiondetection = true,
-							vertical = false,
-							texture = tile,
-						})
-					end
+					minetest.add_particlespawner({
+						time = 0.5,
+						amount = PARTICLE_NUM,
+						minpos = {x = pos.x - 0.5, y = pos.y + 1.1, z = pos.z - 0.5},
+						maxpos = {x = pos.x + 0.5, y = pos.y + 1.1, z = pos.z + 0.5},
+						minvel = {x = 0, y = 3, z = 0},
+						maxvel = {x = 0, y = 5, z = 0},
+						minacc = {x = 0, y = -10, z = 0},
+						maxacc = {x = 0, y = -13, z = 0},
+						minexptime = 0.5,
+						maxexptime = 1,
+						minsize = 0.5,
+						maxsize = 2,
+						collisiondetection = true,
+						vertical = false,
+						texture = tile,
+					})
 				end
 			end
 		end
