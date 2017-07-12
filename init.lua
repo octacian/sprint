@@ -14,12 +14,14 @@ SPEED        = tonumber(SPEED)        or 1.3
 JUMP         = tonumber(JUMP)         or 1.1
 PARTICLE_NUM = tonumber(PARTICLE_NUM) or 1
 
+if minetest.get_modpath("player_monoids") ~=nil then local monoids = true end
+
 ---
 --- Functions
 ---
 
 local function start_sprint(player, name, trigger)
-	if player_monoids then
+	if monoids then
 		player_monoids.speed:add_change(player, SPEED, "sprint:sprint")
 		player_monoids.jump:add_change(player, JUMP, "sprint:jump")
 	else
@@ -29,7 +31,7 @@ local function start_sprint(player, name, trigger)
 end
 
 local function stop_sprint(player, name)
-	if player_monoids then
+	if monoids then
 		player_monoids.speed:del_change(player, "sprint:sprint")
 		player_monoids.jump:del_change(player, "sprint:jump")
 	else
