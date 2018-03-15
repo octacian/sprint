@@ -4,7 +4,7 @@ local sprinting       = {}
 local secondary       = {}
 local PRIMARY         = minetest.settings:get("sprint_primary") or "aux1"
 local SECOND          = minetest.settings:get("sprint_second")  or "up"
-local DIR             = minetest.settings:get("sprint_dir")     or true
+local DIR             = minetest.settings:get("sprint_dir")     or "true"
 local SPEED           = minetest.settings:get("sprint_speed")
 local JUMP            = minetest.settings:get("sprint_jump")
 local PARTICLE_NUM    = minetest.settings:get("sprint_particles")
@@ -54,7 +54,7 @@ minetest.register_globalstep(function(dtime)
 		local spr  = sprinting[name]
 
 		local allow = true
-		if DIR == true then
+		if DIR == "true" then
 			if not ctrl.up then
 				allow = false
 			end
