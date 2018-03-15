@@ -13,6 +13,11 @@ sprint_second (Secondary Sprint Key) string up
 #    If disabled, the secondary sprint key (sprint_second) is not allowed.
 sprint_enable_second (Allow Secondary Sprint Key) bool true
 
+#    If enabled, the sprint_water_speed and sprint_water_jump multipliers are used
+#    when the player is underwater, rather than the sprint_speed and sprint_jump
+#    multipliers.
+sprint_slow_in_water (Slow Sprinting Underwater) bool true
+
 #    Speed multiplier applied when sprinting.
 #    Sprint key configured with the sprint_primary setting.
 sprint_speed (Speed Multiplier) float 1.8
@@ -20,6 +25,16 @@ sprint_speed (Speed Multiplier) float 1.8
 #    Jump multiplier applied when sprinting.
 #    Sprint key configured with the sprint_primary setting.
 sprint_jump (Jump Multiplier) float 1.1
+
+#    Speed multiplier applied when sprinting underwater.
+#    Sprint key configured with the sprint_primary setting.
+#    Only takes effect if sprint_slow_in_water is enabled.
+sprint_water_speed (Underwater Speed Multiplier) float 1.2
+
+#    Jump multiplier applied when sprinting underwater.
+#    Sprint key configured with the sprint_primary setting.
+#    Only takes effect if sprint_slow_in_water is enabled.
+sprint_water_jump (Underwater Jump Multiplier) float 1
 
 #    If enabled, sprinting is only allowed when moving forward, and disallowed
 #    when moving in any other direction.

@@ -7,25 +7,40 @@ local SECOND          = minetest.settings:get("sprint_second")  or "up"
 local DIR             = minetest.settings:get("sprint_dir")     or "true"
 local SPEED           = minetest.settings:get("sprint_speed")
 local JUMP            = minetest.settings:get("sprint_jump")
+local WATER_SPEED     = minetest.settings:get("sprint_water_speed")
+local WATER_JUMP      = minetest.settings:get("sprint_water_jump")
 local PARTICLE_NUM    = minetest.settings:get("sprint_particles")
 local ALLOW_SEC       = minetest.settings:get("sprint_enable_second")
+local SLOW_IN_WATER   = minetest.settings:get("sprint_slow_in_water") or "true"
 
 SPEED        = tonumber(SPEED)        or 1.3
 JUMP         = tonumber(JUMP)         or 1.1
+WATER_SPEED  = tonumber(WATER_SPEED)  or 1.1
+WATER_JUMP   = tonumber(WATER_JUMP)   or 1
 PARTICLE_NUM = tonumber(PARTICLE_NUM) or 1
 
 ---
 --- Functions
 ---
 
-local function start_sprint(player, name, trigger)
-	if player_monoids then
-		player_monoids.speed:add_change(player, SPEED, "sprint:sprint")
-		player_monoids.jump:add_change(player, JUMP, "sprint:jump")
-	else
-		player:set_physics_override({speed = SPEED, jump = JUMP})
+local function start_sprint(player, name, trigger, in_water, log)
+	local new_speed = SPEED
+	local new_jump = JUMP
+	if in_water then
+		new_speed = WATER_SPEED
+		new_jump  = WATER_JUMP
 	end
-	sprinting[name] = {is = true, trigger = trigger}
+
+	if player_monoids then
+		player_monoids.speed:add_change(player, new_speed, "sprint:sprint")
+		player_monoids.jump:add_change(player, new_jump, "sprint:jump")
+	else
+		player:set_physics_override({speed = new_speed, jump = new_jump})
+	end
+
+	if log ~= false then
+		sprinting[name] = {is = true, trigger = trigger}
+	end
 end
 
 local function stop_sprint(player, name)
@@ -60,9 +75,9 @@ minetest.register_globalstep(function(dtime)
 			end
 		end
 
-		-- Stop sprinting when movement controls are released even though
-		-- sprint key is still pressed
 		if spr.is then
+			-- Stop sprinting when movement controls are released even though
+			-- sprint key is still pressed
 			if DIR == "true" then
 				if not ctrl.up then
 					stop_sprint(player, name)
@@ -70,6 +85,20 @@ minetest.register_globalstep(function(dtime)
 			else
 				if not ctrl.up and not ctrl.down and not ctrl.right and not ctrl.left then
 					stop_sprint(player, name)
+				end
+			end
+
+			-- Check if in water
+			if SLOW_IN_WATER then
+				local node = minetest.registered_nodes[minetest.get_node(player:get_pos()).name]
+				if node then
+					if (node.liquidtype ~= "none" and node.liquidtype) and not spr.in_water then
+						spr.in_water = true
+						start_sprint(player, name, nil, true, false)
+					elseif spr.in_water and (node.liquidtype == "none" or not node.liquidtype) then
+						spr.in_water = false
+						start_sprint(player, name, nil, false, false)
+					end
 				end
 			end
 		end
