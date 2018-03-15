@@ -51,17 +51,39 @@ minetest.register_globalstep(function(dtime)
 			sprinting[name] = {is = false}
 		end
 
-		local spr  = sprinting[name]
-
+		local spr = sprinting[name]
 		local allow = true
+
 		if DIR == "true" then
 			if not ctrl.up then
 				allow = false
 			end
 		end
 
+		-- Stop sprinting when movement controls are released even though
+		-- sprint key is still pressed
+		if spr.is then
+			if DIR == "true" then
+				if not ctrl.up then
+					stop_sprint(player, name)
+				end
+			else
+				if not ctrl.up and not ctrl.down and not ctrl.right and not ctrl.left then
+					stop_sprint(player, name)
+				end
+			end
+		end
+
+		-- Begin sprinting again when movement controls are pressed again even
+		-- if the sprint key has not been triggered again but is just being held
+		if ctrl[PRIMARY] and allow and not spr.is and (ctrl.up or ctrl.down or ctrl.right or
+				ctrl.left) then
+			start_sprint(player, name, spr.trigger)
+		end
+
 		-- Primary Key
-		if ctrl[PRIMARY] and allow and not spr.is then
+		if ctrl[PRIMARY] and allow and not spr.is and (ctrl.up or ctrl.down or ctrl.right or
+				ctrl.left) then
 			start_sprint(player, name, "primary")
 		elseif ((not ctrl[PRIMARY] and spr.is) or
 				 (ctrl[PRIMARY] and not allow and spr.is))
